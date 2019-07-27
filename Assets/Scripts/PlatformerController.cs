@@ -6,8 +6,17 @@ public class PlatformerController : MonoBehaviour
 {
 
     public float coyoteTime = 1f;
-    public float horizontalAcceleration = .5f;
-    public float horizontalDamping = 1;
+    public float moveAcceleration = .6f;
+
+    [Range(0, 1)]
+    public float groundDampingMoving = .4f,
+                 groundDampingTurning = .8f,
+                 groundDampingStopping = .8f;
+
+    [Range(0, 1)]
+    public float airDampingMoving = .2f,
+                 airDampingTurning = .95f,
+                 airDampingStopping = .85f;
     
     public float jumpVelocity = 10f;
 
@@ -36,8 +45,29 @@ public class PlatformerController : MonoBehaviour
         //We need an acceleration and a damping value
 
         float xvel = rb.velocity.x;
-        xvel += Input.GetAxis("Horizontal");
-        xvel *= Mathf.Pow(1f-horizontalDamping, Time.deltaTime * 10f);
+        float dampingValue = 1;
+        xvel += Input.GetAxisRaw("Horizontal") * moveAcceleration;
+        if(isGrounded){
+            if(Mathf.Sign(Input.GetAxisRaw("Horizontal")) != Mathf.Sign(xvel)){ //Turning
+                dampingValue = groundDampingTurning;
+            } else if(Mathf.Abs(Input.GetAxisRaw("Horizontal")) < .1f){ //Stopping
+                dampingValue = groundDampingStopping;
+            } else{ //Moving
+                dampingValue = groundDampingMoving;
+            }
+        } else {
+            if(Mathf.Sign(Input.GetAxisRaw("Horizontal")) != Mathf.Sign(xvel)){ //Turning
+                dampingValue = airDampingTurning;
+                //xvel = Input.GetAxisRaw("Horizontal");
+            } else if(Mathf.Abs(Input.GetAxisRaw("Horizontal")) < .1f){ //Stopping
+                dampingValue = airDampingStopping;
+            } else{ //Moving
+                dampingValue = airDampingMoving;
+            }
+        }
+        
+        xvel *= Mathf.Pow(1f-dampingValue, Time.deltaTime * 10f);
+        
         rb.velocity = new Vector2(xvel, rb.velocity.y);
     }
 
@@ -81,7 +111,6 @@ public class PlatformerController : MonoBehaviour
 
         Debug.DrawLine(this.transform.position, avg, Color.green);
 
-        Debug.Log(Vector2.Angle(avg, Vector2.down));
         if(Vector2.Angle(avg, Vector2.down) >= groundedAngle){
             StopCoroutine(coyoteCounter());
             isGrounded = true;
