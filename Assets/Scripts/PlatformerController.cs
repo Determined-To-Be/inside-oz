@@ -14,6 +14,8 @@ public class PlatformerController : MonoBehaviour
 
     public bool isGrounded = true;
 
+    public float groundedAngle = 45;
+
 
     Rigidbody2D rb;
 
@@ -38,6 +40,7 @@ public class PlatformerController : MonoBehaviour
 
     void Jump(){
         if(Input.GetKeyDown("Jump")){
+            StopCoroutine(coyoteCounter());
             rb.velocity = new Vector2(rb.velocity.x, jumpVelocity);
             isGrounded = false;
         }
@@ -47,13 +50,29 @@ public class PlatformerController : MonoBehaviour
         }
     }
 
+    IEnumerator coyoteCounter(){
+        yield return new WaitForSeconds(coyoteTime);
+        isGrounded = false;
+    }
+
     void OnCollisionStay2D(Collision2D other){
 
         Vector2 avg = new Vector2();
         foreach(ContactPoint2D c in other.contacts){
-            Debug.DrawLine(this.transform.position, c.point);
+            Debug.DrawLine(this.transform.position, c.point, Color.black);
             avg += c.point;
         }
-        avg
+        avg /= other.contacts.Length;
+
+        Debug.DrawLine(this.transform.position, avg, Color.green);
+
+        if(Vector2.Angle(avg, Vector2.down) < groundedAngle){
+            StopCoroutine(coyoteCounter());
+            isGrounded = true;
+        }
+    }
+
+    void OnCollisionExit2D(){
+        StartCoroutine(coyoteCounter());
     }
 }
