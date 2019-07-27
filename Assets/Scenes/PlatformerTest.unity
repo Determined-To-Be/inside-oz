@@ -431,14 +431,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19330a38c882e4248897526c27296a25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coyoteTime: 1
-  horizontalAcceleration: 0.5
-  horizontalDamping: 1
-  moveSpeed: 1
+  coyoteTime: 0.25
+  moveAcceleration: 0.6
+  groundDampingMoving: 0.2
+  groundDampingTurning: 0.8
+  groundDampingStopping: 0.8
+  airDampingMoving: 0.2
+  airDampingTurning: 0.95
+  airDampingStopping: 0.85
   jumpVelocity: 10
   isGrounded: 1
-  groundedAngle: 180
-  jumpBufferTime: 10
+  groundedAngle: 90
+  jumpBufferTime: 0.25
   jumpBuffered: 1
 --- !u!50 &1242031233
 Rigidbody2D:
