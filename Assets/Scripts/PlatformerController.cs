@@ -9,24 +9,27 @@ public class PlatformerController : MonoBehaviour
     public float horizontalAcceleration = .5f;
     public float horizontalDamping = 1;
     
-    public float moveSpeed = 1;
     public float jumpVelocity = 10f;
 
     public bool isGrounded = true;
 
     public float groundedAngle = 45;
 
+    public float jumpBufferTime = .5f;
+    public bool jumpBuffered = false;
+
 
     Rigidbody2D rb;
 
     void Start()
     {
-        
+        rb = this.GetComponent<Rigidbody2D>();
     }
 
     void FixedUpdate()
     {
-        
+        Move();
+        Jump();
     }
 
     void Move(){
@@ -39,15 +42,27 @@ public class PlatformerController : MonoBehaviour
     }
 
     void Jump(){
-        if(Input.GetKeyDown("Jump")){
+        
+        if(Input.GetButton("Jump")){
+            jumpBuffered = true;
+            StartCoroutine(jumpBufferTimer(jumpBufferTime));
+        }
+
+        if(isGrounded && jumpBuffered){
+            jumpBuffered = false;
             StopCoroutine(coyoteCounter());
             rb.velocity = new Vector2(rb.velocity.x, jumpVelocity);
             isGrounded = false;
         }
 
-        if(Input.GetKeyUp("Jump") && rb.velocity.y > 0){
+        if(Input.GetButtonUp("Jump") && rb.velocity.y > 0){
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * .5f);
         }
+    }
+
+    IEnumerator jumpBufferTimer(float time){
+        yield return new WaitForSeconds(time);
+        jumpBuffered = false;
     }
 
     IEnumerator coyoteCounter(){
@@ -66,7 +81,8 @@ public class PlatformerController : MonoBehaviour
 
         Debug.DrawLine(this.transform.position, avg, Color.green);
 
-        if(Vector2.Angle(avg, Vector2.down) < groundedAngle){
+        Debug.Log(Vector2.Angle(avg, Vector2.down));
+        if(Vector2.Angle(avg, Vector2.down) >= groundedAngle){
             StopCoroutine(coyoteCounter());
             isGrounded = true;
         }
