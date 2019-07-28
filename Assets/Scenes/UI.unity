@@ -3314,8 +3314,8 @@ MonoBehaviour:
   next: {fileID: 385250886}
   icon: {fileID: 1017918152}
   icon2: {fileID: 2085968745}
-  mc: {fileID: 0}
-  villain: {fileID: 0}
+  mc: {fileID: 21300000, guid: 554b437e43f57344f96bb020dc4b2f18, type: 3}
+  villain: {fileID: 21300000, guid: a4705791c06470842b70bbb0c3a572ac, type: 3}
   princess: {fileID: 21300000, guid: 89b7a8500fe0fa140b4823d43520717a, type: 3}
   warrior: {fileID: 21300000, guid: e0c616c4333fe9e4db84a6973626d4a1, type: 3}
   wizard: {fileID: 21300000, guid: c7d9751a6b75d004ba02265175999142, type: 3}
