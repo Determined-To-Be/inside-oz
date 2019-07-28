@@ -26,7 +26,7 @@ public class WizardController : PlatformerController
         
     }
     
-    void OnTriggerStay2D(Collision2D other){
+    void OnTriggerStay2D(Collider2D other){
         //For the Attack
         if(other.transform.tag == "Enemy"){
             doEvent = true;
@@ -37,7 +37,7 @@ public class WizardController : PlatformerController
         }
     }
 
-    void OnTriggerExit2D(Collision2D other){
+    void OnTriggerExit2D(Collider2D other){
         if(other.transform.tag == "Event"){
             doEvent = false;
         }

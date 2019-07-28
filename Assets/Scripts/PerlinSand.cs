@@ -5,7 +5,16 @@ using UnityEditor;
 
 [CustomEditor(typeof(PerlinSand))]
 public class PerlinSandEditor : Editor{
-    SerializeField 
+
+    void OnEnable()
+    {
+    }
+
+    void OnInspectorGUI(){
+        if(GUILayout.Button("Update")){
+
+        }
+    }
 }
 
 

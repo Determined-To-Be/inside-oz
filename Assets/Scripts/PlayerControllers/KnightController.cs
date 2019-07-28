@@ -28,7 +28,7 @@ public class KnightController : PlatformerController
 
     }
 
-    void OnTriggerStay2D(Collision2D other){
+    void OnTriggerStay2D(Collider2D other){
         //For the Attack
         if(other.transform.tag.ToLower().CompareTo("event") == 0){
             doEvent = true;
@@ -39,7 +39,7 @@ public class KnightController : PlatformerController
         }
     }
 
-    void OnTriggerExit2D(Collision2D other){
+    void OnTriggerExit2D(Collider2D other){
         if(other.transform.tag.ToLower().CompareTo("event") == 0){
             doEvent = false;
         }
