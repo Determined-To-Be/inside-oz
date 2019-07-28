@@ -12,7 +12,7 @@ public class KnightController : PlatformerController
     // Start is called before the first frame update
     void Start(){
         base.Start();
-        PlayerPrefs.GetFloat("courage"); //Get current courage values
+        PlayerPrefs.GetFloat("maxAP"); //Get current courage values
     }
 
     // Update is called once per frame
