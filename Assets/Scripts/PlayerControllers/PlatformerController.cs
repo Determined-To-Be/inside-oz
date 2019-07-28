@@ -42,6 +42,10 @@ public class PlatformerController : MonoBehaviour
         rb = this.GetComponent<Rigidbody2D>();
         animator = this.GetComponent<Animator>();
         manager = GameObject.FindObjectOfType<CharacterManager>();
+
+        if(animator == null){
+            animator = this.gameObject.AddComponent<Animator>();
+        }
     }
 
     public void FixedUpdate()
