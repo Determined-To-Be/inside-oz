@@ -17,22 +17,9 @@ public class HUDController : MonoBehaviour
         instance = GetComponent<HUDController>();
     }
 
-    public void setHP(int val)
+    void Update()
     {
-        hp.value = val;
-        numHP.text = val.ToString();
-    }
-
-    public void setMP(int val)
-    {
-        mp.value = val;
-        numMP.text = val.ToString();
-    }
-
-    public void setAP(int val)
-    {
-        ap.value = val;
-        numAP.text = val.ToString();
+        // TODO regen hp, mp, and ap
     }
 
     public int getHP()
@@ -50,9 +37,54 @@ public class HUDController : MonoBehaviour
         return Mathf.FloorToInt(ap.value);
     }
 
+    public int getMaxHP()
+    {
+        return Mathf.FloorToInt(hp.maxValue);
+    }
+
+    public int getMaxMP()
+    {
+        return Mathf.FloorToInt(mp.maxValue);
+    }
+
+    public int getMaxAP()
+    {
+        return Mathf.FloorToInt(ap.maxValue);
+    }
+
+    public void setHP(int val)
+    {
+        if (val > getMaxHP())
+        {
+            return;
+        }
+        hp.value = val;
+        numHP.text = val.ToString();
+    }
+
+    public void setMP(int val)
+    {
+        if (val > getMaxMP())
+        {
+            return;
+        }
+        mp.value = val;
+        numMP.text = val.ToString();
+    }
+
+    public void setAP(int val)
+    {
+        if (val > getMaxAP())
+        {
+            return;
+        }
+        ap.value = val;
+        numAP.text = val.ToString();
+    }
+
     public void setMaxHP(int val)
     {
-        int temp = Mathf.FloorToInt(hp.maxValue);
+        int temp = getMaxHP();
         hp.maxValue = val;
         PlayerPrefs.SetInt(hpkey, val);
         setHP(getHP() + val - temp);
@@ -60,7 +92,7 @@ public class HUDController : MonoBehaviour
 
     public void setMaxMP(int val)
     {
-        int temp = Mathf.FloorToInt(mp.maxValue);
+        int temp = getMaxMP();
         mp.maxValue = val;
         PlayerPrefs.SetInt(mpkey, val);
         setHP(getMP() + val - temp);
@@ -68,7 +100,7 @@ public class HUDController : MonoBehaviour
 
     public void setMaxAP(int val)
     {
-        int temp = Mathf.FloorToInt(ap.maxValue);
+        int temp = getMaxAP();
         ap.maxValue = val;
         PlayerPrefs.SetInt(apkey, val);
         setHP(getAP() + val - temp);
@@ -76,16 +108,36 @@ public class HUDController : MonoBehaviour
 
     public void decrementHP()
     {
-        setHP(Mathf.FloorToInt(hp.value--));
+        setHP(getHP() - 1);
     }
 
     public void decrementMP()
     {
-        setMP(Mathf.FloorToInt(mp.value--));
+        setMP(getMP() - 1);
     }
 
     public void decrementAP()
     {
-        setAP(Mathf.FloorToInt(ap.value--));
+        setAP(getAP() - 1);
+    }
+
+    public void incrementHP()
+    {
+        setHP(getHP() + 1);
+    }
+
+    public void incrementMP()
+    {
+        setMP(getMP() + 1);
+    }
+
+    public void incrementAP()
+    {
+        setMP(getMP() + 1);
+    }
+
+    public bool amidead()
+    {
+        return getHP() <= 0;
     }
 }
