@@ -7,8 +7,8 @@ public class CameraController : MonoBehaviour
 
     public static CameraController instance;
 
-    Transform[] screenPositions;
-    int currScreen = 0;
+    public Transform[] screenPositions;
+    public int currScreen = 0;
 
     void Start(){
         instance = this.GetComponent<CameraController>();
