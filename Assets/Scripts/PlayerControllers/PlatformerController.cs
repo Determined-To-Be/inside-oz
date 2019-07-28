@@ -9,6 +9,7 @@ public class PlatformerController : MonoBehaviour
     public float moveAcceleration = .6f;
 
     public CharacterManager manager;
+    public Animator animator;
 
     [Range(0, 1)]
     public float groundDampingMoving = .4f,
@@ -28,24 +29,32 @@ public class PlatformerController : MonoBehaviour
 
     public float jumpBufferTime = .5f;
     public bool jumpBuffered = false;
-
+    public float knockback = 4;
 
     protected Rigidbody2D rb;
+
+    protected int direction = 1;
 
     public void Start()
     {
         rb = this.GetComponent<Rigidbody2D>();
+        animator = this.GetComponent<Animator>();
     }
 
     public void FixedUpdate()
     {
         Move();
         Jump();
+
+        this.transform.rotation = Quaternion.Euler(this.transform.rotation.eulerAngles.x, 90 + 90 * direction, this.transform.rotation.eulerAngles.z);
     }
 
     void Move(){
-        //We need an acceleration and a damping value
+        //Change Rotation based on the last movement
+        if(Mathf.Abs(Input.GetAxisRaw("Horizontal")) > .5f)
+            direction = Mathf.RoundToInt(Mathf.Sign(Input.GetAxisRaw("Horizontal")));
 
+        //We need an acceleration and a damping value
         float xvel = rb.velocity.x;
         float dampingValue = 1;
         xvel += Input.GetAxisRaw("Horizontal") * moveAcceleration;
@@ -101,10 +110,8 @@ public class PlatformerController : MonoBehaviour
         yield return new WaitForSeconds(coyoteTime);
         isGrounded = false;
     }
-
-
+    
     void OnCollisionStay2D(Collision2D other){
-
         Vector2 avg = new Vector2();
         foreach(ContactPoint2D c in other.contacts){
             Debug.DrawLine(this.transform.position, c.point, Color.black);
@@ -120,6 +127,12 @@ public class PlatformerController : MonoBehaviour
         if(Vector2.Angle(avg, Vector2.down) <= groundedAngle){
             StopCoroutine(coyoteCounter());
             isGrounded = true;
+        }
+
+        if(other.transform.tag == "Enemy"){
+            manager.TakeDamage(1);
+            //avg is already direction
+            //rb.velocity = -avg * knockback;
         }
     }
 

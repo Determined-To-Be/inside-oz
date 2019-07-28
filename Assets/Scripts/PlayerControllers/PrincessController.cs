@@ -24,6 +24,7 @@ public class PrincessController : PlatformerController
         if(other.transform.tag == "Enemy"){
             Debug.Log(rb.velocity.y);
             if(rb.velocity.y <= 2){ //Only if I am falling can I kill an enemy
+                manager.invincibility(.25f);
                 rb.velocity = new Vector2(rb.velocity.x, bounceVelocity);
                 return;
             }

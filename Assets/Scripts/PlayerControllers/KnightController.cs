@@ -5,14 +5,13 @@ using UnityEngine;
 public class KnightController : PlatformerController
 {
 
-    public int courage = 1;
-    bool doEvent = false;
-    Animator animator;
+    public int maxAP = 1;
+    public GameObject attackHitbox;
 
     // Start is called before the first frame update
     void Start(){
         base.Start();
-        PlayerPrefs.GetFloat("maxAP"); //Get current courage values
+        maxAP = PlayerPrefs.GetInt("maxAP"); //Get current courage values
     }
 
     // Update is called once per frame
@@ -20,28 +19,18 @@ public class KnightController : PlatformerController
         
     }
 
-    void Action(){
-
-    }
-
-    void SwordSwing(){
-
+    IEnumerator SwordSwing(){
+        animator.Play("attack");
+        attackHitbox.SetActive(true);
+        while(this.animator.GetCurrentAnimatorStateInfo(0).IsName("attack")){
+            yield return null;
+        }
+        attackHitbox.SetActive(false);
     }
 
     void OnTriggerStay2D(Collider2D other){
-        //For the Attack
-        if(other.transform.tag == "Event"){
-            doEvent = true;
-        }
-
         if(other.transform.tag == "Enemy"){
             //Do Kill Enemy
-        }
-    }
-
-    void OnTriggerExit2D(Collider2D other){
-        if(other.transform.tag.ToLower().CompareTo("event") == 0){
-            doEvent = false;
         }
     }
 }

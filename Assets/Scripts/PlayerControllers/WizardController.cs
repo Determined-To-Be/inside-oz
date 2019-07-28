@@ -6,60 +6,60 @@ public class WizardController : PlatformerController
 {
 
     public GameObject lightningBolt;
-    public int magicAbility = 1;
-    bool doEvent = false;
-    public float coolDownTime = 1f;
-    public bool canShoot = true;
-
-    public GameObject attackTrigger;
+    public int maxMP = 1;
+    float mpRecoveryRate = 1, mp = 0;
+    bool isCharging = false;
+    public float chargeSpeed = 1;
     // Start is called before the first frame update
     void Start(){
         //Get Current magic
         base.Start();
-        PlayerPrefs.GetFloat("maxMP");
+        maxMP = PlayerPrefs.GetInt("maxMP");
     }
 
     // Update is called once per frame
     void Update(){
-        if(Input.GetButtonDown("Action")){
-            if(doEvent){
-                return;
-            }
-            canShoot = false;
-            StartCoroutine(shootTimer(coolDownTime));
+        HUDController.instance.setMP((int)mp);
+
+        if(isCharging == false){
+            mp = Mathf.Clamp(mp + mpRecoveryRate, 0, maxMP);
+            
+        }
+
+        if(Input.GetButtonDown("Action")){ //Start Charging
+            isCharging = true;
+            StartCoroutine(ChargeLightning());
+        }
+
+        if(Input.GetButtonUp("Action")){ //Release Charge
+            isCharging = false;
         }
     }
-
-    IEnumerator shootTimer(float time){
-        yield return new WaitForSeconds(time);
-        canShoot = true;
-    }
     
-    void Action(){
+    float chargeMagic = 0;
+
+    IEnumerator ChargeLightning(){
+        //Start a particle effect??
+        while(isCharging){
+            if(mp >= 0){
+                float val = 1 * Time.deltaTime;
+                chargeMagic += val;
+                mp -= val;
+                //Charge the magic stats
+            }
+        }
         
+        isCharging = false;
+        chargeMagic = 0;
+        return null;
     }
 
     void ShootLightning(){
         GameObject go = Instantiate(lightningBolt, this.transform.position, Quaternion.identity);
         WizardLightning lightning = go.GetComponent<WizardLightning>();
-    }
-    
-    void OnTriggerStay2D(Collider2D other){
-        //For the Attack
-        if(other.transform.tag == "Event"){
-            doEvent = true;
-            if(Input.GetButtonDown("Action")){
-                //Do the check on the requirements
-                //If we meet them run the script
-                //If not dont
-            }
-        }
-    }
+        lightning.magic = chargeMagic;
+        lightning.calcLifetime();
 
-    void OnTriggerExit2D(Collider2D other){
-        if(other.transform.tag == "Event"){
-            doEvent = false;
-        }
+        lightning.direction = direction;//Get currDirection
     }
-
 }
