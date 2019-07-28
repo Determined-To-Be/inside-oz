@@ -7,6 +7,7 @@ public class WizardController : PlatformerController
 
     public GameObject lightningBolt;
     public int magicAbility = 1;
+    bool doEvent = false;
     // Start is called before the first frame update
     void Start(){
         //Get Current magic
@@ -20,9 +21,22 @@ public class WizardController : PlatformerController
     void Action(){
         
     }
+    
+    void OnTriggerStay2D(Collision2D other){
+        //For the Attack
+        if(other.transform.tag.ToLower().CompareTo("event") == 0){
+            doEvent = true;
+        }
 
-    void CastMagic(){
+        if(other.transform.tag.ToLower().CompareTo("enemy") == 0){
+            //Do Damage to enemy
+        }
+    }
 
+    void OnTriggerExit2D(Collision2D other){
+        if(other.transform.tag.ToLower().CompareTo("event") == 0){
+            doEvent = false;
+        }
     }
 
 }
