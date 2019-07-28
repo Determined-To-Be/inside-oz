@@ -7,8 +7,8 @@ public class WizardController : PlatformerController
 
     public GameObject lightningBolt;
     public int maxMP = 1;
-    float mpRecoveryRate = 1, mp = 0;
-    bool isCharging = false;
+    public float mpRecoveryRate = 1, mp = 0;
+    public bool isCharging = false;
     public float chargeSpeed = 1;
     // Start is called before the first frame update
     void Start(){
@@ -22,7 +22,7 @@ public class WizardController : PlatformerController
 //        HUDController.instance.setMP((int)mp);
 
         if(isCharging == false){
-            mp = Mathf.Clamp(mp + mpRecoveryRate, 0, maxMP);
+            mp = Mathf.Clamp(mp + mpRecoveryRate * Time.deltaTime, 0, maxMP);
             
         }
 
@@ -42,19 +42,20 @@ public class WizardController : PlatformerController
         //Start a particle effect??
         while(isCharging){
             if(mp >= 0){
-                float val = 1 * Time.deltaTime;
+                float val = 10 * Time.deltaTime;
                 chargeMagic += val;
                 mp -= val;
                 //Charge the magic stats
             }
             yield return null;
         }
-        
         isCharging = false;
+        ShootLightning();
         chargeMagic = 0;
     }
 
     void ShootLightning(){
+        Debug.Log("Shooting Lightning");
         GameObject go = Instantiate(lightningBolt, this.transform.position, Quaternion.identity);
         WizardLightning lightning = go.GetComponent<WizardLightning>();
         lightning.magic = chargeMagic;
