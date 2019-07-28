@@ -11,6 +11,8 @@ public class WizardController : PlatformerController
     // Start is called before the first frame update
     void Start(){
         //Get Current magic
+        base.Start();
+        PlayerPrefs.GetFloat("magic");
     }
 
     // Update is called once per frame
@@ -24,17 +26,17 @@ public class WizardController : PlatformerController
     
     void OnTriggerStay2D(Collision2D other){
         //For the Attack
-        if(other.transform.tag.ToLower().CompareTo("event") == 0){
+        if(other.transform.tag == "Enemy"){
             doEvent = true;
         }
 
-        if(other.transform.tag.ToLower().CompareTo("enemy") == 0){
-            //Do Damage to enemy
+        if(other.transform.tag == "Enemy"){
+            //Do Stun Enemy
         }
     }
 
     void OnTriggerExit2D(Collision2D other){
-        if(other.transform.tag.ToLower().CompareTo("event") == 0){
+        if(other.transform.tag == "Event"){
             doEvent = false;
         }
     }

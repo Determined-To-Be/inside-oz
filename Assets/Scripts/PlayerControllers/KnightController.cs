@@ -7,10 +7,12 @@ public class KnightController : PlatformerController
 
     public int courage = 1;
     bool doEvent = false;
+    Animator animator;
 
     // Start is called before the first frame update
     void Start(){
-        //Get new Courage value
+        base.Start();
+        PlayerPrefs.GetFloat("courage"); //Get current courage values
     }
 
     // Update is called once per frame
