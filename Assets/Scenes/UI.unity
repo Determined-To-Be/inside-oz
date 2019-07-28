@@ -97,7 +97,7 @@ LightmapSettings:
     m_ShowResolutionOverlay: 1
     m_ExportTrainingData: 0
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -3313,6 +3313,12 @@ MonoBehaviour:
   choice3: {fileID: 1718092658}
   next: {fileID: 385250886}
   icon: {fileID: 1017918152}
+  icon2: {fileID: 2085968745}
+  mc: {fileID: 0}
+  villain: {fileID: 0}
+  princess: {fileID: 21300000, guid: 89b7a8500fe0fa140b4823d43520717a, type: 3}
+  warrior: {fileID: 21300000, guid: e0c616c4333fe9e4db84a6973626d4a1, type: 3}
+  wizard: {fileID: 21300000, guid: c7d9751a6b75d004ba02265175999142, type: 3}
   monologue: {fileID: 1670157998}
   dialogue: {fileID: 1928918390}
 --- !u!1 &765782886
