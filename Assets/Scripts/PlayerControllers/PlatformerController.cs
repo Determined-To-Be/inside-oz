@@ -28,7 +28,7 @@ public class PlatformerController : MonoBehaviour
     public bool jumpBuffered = false;
 
 
-    Rigidbody2D rb;
+    protected Rigidbody2D rb;
 
     void Start()
     {
@@ -99,6 +99,7 @@ public class PlatformerController : MonoBehaviour
         yield return new WaitForSeconds(coyoteTime);
         isGrounded = false;
     }
+
 
     void OnCollisionStay2D(Collision2D other){
 
