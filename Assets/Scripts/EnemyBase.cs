@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyBase : MonoBehaviour
 {
 
-    public int life;
+    public int life = 1;
     public float stunDuration;
     public int damage = 1;
     public bool isStunned = false;
@@ -19,6 +19,10 @@ public class EnemyBase : MonoBehaviour
     // Update is called once per frame
     public void Update()
     {
+        if(life == 0){
+            DestroyImmediate(this.gameObject);
+        }
+
         if(stunDuration > 0){
             isStunned = true;
             stunDuration -= Time.deltaTime;
@@ -28,7 +32,7 @@ public class EnemyBase : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D coll){
-        
+
     }
 
 

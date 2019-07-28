@@ -145,10 +145,12 @@ public class PlatformerController : MonoBehaviour
         }
 
         if(other.transform.tag == "Enemy"){
-            if(manager.TakeDamage(1)){
-                Debug.Log("I hit an enemy");
+            EnemyBase b = other.gameObject.GetComponent<EnemyBase>();
+            if(manager.TakeDamage(b.damage)){
+                
                 //avg is already direction
-                rb.velocity = -avg * knockback;
+                float a = Mathf.Sign(-avg.x); 
+                rb.velocity = ((a * Vector2.right) + Vector2.up) * knockback;
                 isGrounded = false;
                 stopInput = true;
             }
