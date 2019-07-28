@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
@@ -9,12 +7,14 @@ public class HUDController : MonoBehaviour
     public Slider hp, mp, ap;
     private const string hpkey = "maxHP", mpkey = "maxMP", apkey = "maxAP";
     private TMP_Text numHP, numMP, numAP;
+    public static HUDController instance;
 
     void Start()
     {
         numHP = hp.GetComponent<TMP_Text>();
         numMP = mp.GetComponent<TMP_Text>();
         numAP = ap.GetComponent<TMP_Text>();
+        instance = GetComponent<HUDController>();
     }
 
     public void setHP(int val)
