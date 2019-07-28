@@ -47,11 +47,11 @@ public class WizardController : PlatformerController
                 mp -= val;
                 //Charge the magic stats
             }
+            yield return null;
         }
         
         isCharging = false;
         chargeMagic = 0;
-        return null;
     }
 
     void ShootLightning(){
