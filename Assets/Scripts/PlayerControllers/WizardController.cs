@@ -27,7 +27,7 @@ public class WizardController : PlatformerController
     }
 
     void ShootLightning(){
-        GameObject go = Instantiate(lightningBolt, this.transform.position, Quaternion.identity)
+        GameObject go = Instantiate(lightningBolt, this.transform.position, Quaternion.identity);
     }
     
     void OnTriggerStay2D(Collider2D other){
