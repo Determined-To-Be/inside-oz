@@ -14,6 +14,7 @@ public class EventController : MonoBehaviour
     public Image next, icon;
     public GameObject monologue, dialogue;
 
+    // contains literally all the text
     void Start()
     {
         // intro
@@ -171,11 +172,7 @@ public class EventController : MonoBehaviour
         text[11][0] = "The party did indeed find [Alex], in the desert.";
     }
 
-    void Update()
-    {
-
-    }
-
+    // starts the new event dialogue
     public EventController(int eventNum)
     {
         page = 0;
@@ -188,6 +185,7 @@ public class EventController : MonoBehaviour
         return words.Replace(playerPlaceholder, alex).Replace(evilPlaceholder, xela);
     }
 
+    // call before first nextPage() and after new EventController(eventNum)
     public void setName(string name)
     {
         alex = name;
@@ -196,11 +194,12 @@ public class EventController : MonoBehaviour
         xela = temp.ToArray().ToString();
     }
 
+    // call after making a new EventController(eventNum)
     public void nextPage()
     {
         StartCoroutine("doNext");
     }
-
+    
     private IEnumerator doNext()
     {
         next.gameObject.SetActive(false);
@@ -212,6 +211,7 @@ public class EventController : MonoBehaviour
         next.gameObject.SetActive(true);
     }
     
+    // call after the last nextPage()
     public void choose(bool isThree)
     {
         monologue.gameObject.SetActive(false);
@@ -225,7 +225,8 @@ public class EventController : MonoBehaviour
         dialogue.gameObject.SetActive(true);
     }
 
-    // number result for that event index 0, not the actual text[][] index
+    /* number result for that event index 0, not the actual text[][] index
+     * call after choose() */
     public void choiceResult(int resultNum)
     {
         dialogue.gameObject.SetActive(false);
