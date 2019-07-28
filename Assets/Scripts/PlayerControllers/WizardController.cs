@@ -8,6 +8,8 @@ public class WizardController : PlatformerController
     public GameObject lightningBolt;
     public int magicAbility = 1;
     bool doEvent = false;
+
+    public GameObject attackTrigger;
     // Start is called before the first frame update
     void Start(){
         //Get Current magic
