@@ -8,6 +8,8 @@ public class PlatformerController : MonoBehaviour
     public float coyoteTime = 1f;
     public float moveAcceleration = .6f;
 
+    public CharacterManager manager;
+
     [Range(0, 1)]
     public float groundDampingMoving = .4f,
                  groundDampingTurning = .8f,
@@ -65,7 +67,7 @@ public class PlatformerController : MonoBehaviour
                 dampingValue = airDampingMoving;
             }
         }
-        
+
         xvel *= Mathf.Pow(1f-dampingValue, Time.deltaTime * 10f);
         
         rb.velocity = new Vector2(xvel, rb.velocity.y);
