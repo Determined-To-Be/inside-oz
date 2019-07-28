@@ -46,6 +46,11 @@ public class PlatformerController : MonoBehaviour
 
     public void FixedUpdate()
     {
+        animator.SetBool("isGrounded", isGrounded);
+        animator.SetFloat("Horizontal", rb.velocity.x);
+        animator.SetFloat("Vertical", rb.velocity.y);
+        
+
         if(!stopInput){
             Move();
             Jump();
@@ -91,6 +96,8 @@ public class PlatformerController : MonoBehaviour
 
         xvel *= Mathf.Pow(1f-dampingValue, Time.deltaTime * 10f);
         
+
+
         rb.velocity = new Vector2(xvel, rb.velocity.y);
     }
 
@@ -102,6 +109,7 @@ public class PlatformerController : MonoBehaviour
         }
 
         if(isGrounded && jumpBuffered){
+            animator.SetTrigger("jump");
             jumpBuffered = false;
             StopCoroutine(coyoteCounter());
             rb.velocity = new Vector2(rb.velocity.x, jumpVelocity);
