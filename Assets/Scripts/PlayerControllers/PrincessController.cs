@@ -22,8 +22,10 @@ public class PrincessController : PlatformerController
 
     void OnCollisionEnter2D(Collision2D other){
         if(other.transform.tag == "Enemy"){
-            if(rb.velocity.y < 0){ //Only if I am falling can I kill an enemy
+            Debug.Log(rb.velocity.y);
+            if(rb.velocity.y <= 2){ //Only if I am falling can I kill an enemy
                 rb.velocity = new Vector2(rb.velocity.x, bounceVelocity);
+                return;
             }
         }
     }

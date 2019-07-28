@@ -25,10 +25,14 @@ public class WizardController : PlatformerController
     void Action(){
         
     }
+
+    void ShootLightning(){
+        GameObject go = Instantiate(lightningBolt, this.transform.position, Quaternion.identity)
+    }
     
     void OnTriggerStay2D(Collider2D other){
         //For the Attack
-        if(other.transform.tag == "Enemy"){
+        if(other.transform.tag == "Event"){
             doEvent = true;
         }
 

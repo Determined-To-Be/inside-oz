@@ -20,7 +20,7 @@ public class PerlinSand : MonoBehaviour{
 
     void Start(){
         filter = this.GetComponent<MeshFilter>();
-        originalVerts = filter.mesh.vertices;
+        originalVerts = filter.sharedMesh.vertices;
     }
 
     void Update(){

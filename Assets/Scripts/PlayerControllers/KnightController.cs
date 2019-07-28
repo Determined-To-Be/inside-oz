@@ -30,12 +30,12 @@ public class KnightController : PlatformerController
 
     void OnTriggerStay2D(Collider2D other){
         //For the Attack
-        if(other.transform.tag.ToLower().CompareTo("event") == 0){
+        if(other.transform.tag == "Event"){
             doEvent = true;
         }
 
-        if(other.transform.tag.ToLower().CompareTo("enemy") == 0){
-            //Do Damage to enemy
+        if(other.transform.tag == "Enemy"){
+            //Do Kill Enemy
         }
     }
 
