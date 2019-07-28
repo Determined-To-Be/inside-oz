@@ -29,24 +29,36 @@ public class PlatformerController : MonoBehaviour
 
     public float jumpBufferTime = .5f;
     public bool jumpBuffered = false;
-    public float knockback = 4;
+    public float knockback = 15;
 
     protected Rigidbody2D rb;
 
     protected int direction = 1;
 
+    public bool stopInput = false;
+
     public void Start()
     {
         rb = this.GetComponent<Rigidbody2D>();
         animator = this.GetComponent<Animator>();
+        manager = GameObject.FindObjectOfType<CharacterManager>();
     }
 
     public void FixedUpdate()
     {
-        Move();
-        Jump();
+        if(!stopInput){
+            Move();
+            Jump();
+        }
 
         this.transform.rotation = Quaternion.Euler(this.transform.rotation.eulerAngles.x, 90 + 90 * direction, this.transform.rotation.eulerAngles.z);
+    }
+
+    void OnDisable(){
+        StopAllCoroutines();
+        stopInput = false;
+        isGrounded = false;
+        jumpBuffered = false;
     }
 
     void Move(){
@@ -84,7 +96,7 @@ public class PlatformerController : MonoBehaviour
 
     void Jump(){
         
-        if(Input.GetButton("Jump")){
+        if(Input.GetButton("Jump") && stopInput == false){
             jumpBuffered = true;
             StartCoroutine(jumpBufferTimer(jumpBufferTime));
         }
@@ -110,7 +122,7 @@ public class PlatformerController : MonoBehaviour
         yield return new WaitForSeconds(coyoteTime);
         isGrounded = false;
     }
-    
+
     void OnCollisionStay2D(Collision2D other){
         Vector2 avg = new Vector2();
         foreach(ContactPoint2D c in other.contacts){
@@ -125,18 +137,26 @@ public class PlatformerController : MonoBehaviour
         Debug.DrawLine((Vector2)this.transform.position + avg, (Vector2)this.transform.position + Vector2.down, Color.blue);
 
         if(Vector2.Angle(avg, Vector2.down) <= groundedAngle){
-            StopCoroutine(coyoteCounter());
-            isGrounded = true;
+            if(other.transform.tag != "Enemy"){
+                StopCoroutine(coyoteCounter());
+                isGrounded = true;
+                stopInput = false;
+            }
         }
 
         if(other.transform.tag == "Enemy"){
-            manager.TakeDamage(1);
-            //avg is already direction
-            //rb.velocity = -avg * knockback;
+            if(manager.TakeDamage(1)){
+                Debug.Log("I hit an enemy");
+                //avg is already direction
+                rb.velocity = -avg * knockback;
+                isGrounded = false;
+                stopInput = true;
+            }
         }
     }
 
     void OnCollisionExit2D(){
-        StartCoroutine(coyoteCounter());
+        if(this.gameObject.activeSelf)
+            StartCoroutine(coyoteCounter());
     }
 }

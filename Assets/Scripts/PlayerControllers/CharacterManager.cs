@@ -15,7 +15,7 @@ public class CharacterManager : MonoBehaviour
     void Start()
     {
         health = PlayerPrefs.GetInt("maxHP");
-        HUDController.instance.setHP(health);
+        //HUDController.instance.setHP(health); //TODO uncomment when HUDController added to scene
     }
 
     // Update is called once per frame
@@ -45,10 +45,11 @@ public class CharacterManager : MonoBehaviour
         // Activate GAmeover
     }
 
-    bool isInvincible = false;
+    public bool isInvincible = false;
 
     public void invincibility(float duration){
         isInvincible = true;
+        StartCoroutine(invincibilityTimer(duration));
     }
 
     IEnumerator invincibilityTimer(float duration){
@@ -56,13 +57,17 @@ public class CharacterManager : MonoBehaviour
         isInvincible = false;
     }
 
-    public void TakeDamage(int amount){
+    public bool TakeDamage(int amount){
         if(isInvincible){
-            return;
+            return false;
         }
 
+        Debug.Log("Ouch I got hit");
+
         health -= amount;
-        HUDController.instance.setHP(health);
+//        HUDController.instance.setHP(health);
+        
         invincibility(1);
+        return true;
     }
 }
