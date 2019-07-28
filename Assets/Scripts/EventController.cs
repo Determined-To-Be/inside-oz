@@ -7,16 +7,20 @@ using UnityEngine.UI;
 public class EventController : MonoBehaviour
 {
     public TMP_Text body, choice1, choice2, choice3;
-    private const string playerPlaceholder = "[Alex]", evilPlaceholder = "[Xela]", choicePlaceholder = "[choice]";
+    private const string playerPlaceholder = "[Alex]", evilPlaceholder = "[Xela]", choicePlaceholder = "[choice]", characterPlaceholder = "[char]";
     private string[][] text;
-    private string alex = "ALEX", xela = "XELA";
-    private int page = 0, eventNum = 0;
-    public Image next, icon;
+    private string alex = "ALEX", xela = "XELA", chari = "PRINCESS";
+    private int page = 0, eventNum = 0, charSelect = 0;
+    public Image next, icon, icon2;
+    public Sprite mc, villain, princess, warrior, wizard;
+    private Sprite charmi;
     public GameObject monologue, dialogue;
 
     // contains literally all the text
     void Start()
     {
+        charmi = princess;
+
         // intro
         text[0][0] = "On a cold, rainy night...";
         text[0][1] = "[Alex], an accountant, comes home from a long day at work.";
@@ -157,19 +161,19 @@ public class EventController : MonoBehaviour
         text[10][1] = "[Xela] shouts at them as it sinks into the dust it came from...";
         text[10][2] = "“How could you have defeated us?!?”";
         text[10][3] = "“[Alex] . . .”";
-        text[10][3] = "“W  E    A  R  E  --”";
-        text[10][3] = "** GARBLED **";
-        text[10][3] = "The party paused...";
-        text[10][3] = "** y  o  u    a  c  c  e  p  t    r  e  a  l  i  t  y **";
+        text[10][4] = "“W  E    A  R  E  --”";
+        text[10][5] = "** GARBLED **";
+        text[10][6] = "The party paused...";
+        text[10][7] = "** y  o  u    a  c  c  e  p  t    r  e  a  l  i  t  y **";
         // credits
 
         // outro
         text[11][0] = "[Alex] abruptly falls out of bed.";
-        text[11][0] = "Realizing it was a dream, [Alex] wonders about the three party members.";
-        text[11][0] = "The [char] closely parallels [Alex]'s own struggles.";
-        text[11][0] = "With the determination to follow the [char]'s example, [Alex] found some peace of mind, despite the rough night.";
-        text[11][0] = "They are prepared for existential combat in the future.";
-        text[11][0] = "The party did indeed find [Alex], in the desert.";
+        text[11][1] = "Realizing it was a dream, [Alex] wonders about the three party members.";
+        text[11][2] = "The [char] closely parallels [Alex]'s own struggles.";
+        text[11][3] = "With the determination to follow the [char]'s example, [Alex] found some peace of mind, despite the rough night.";
+        text[11][4] = "They are prepared for existential combat in the future.";
+        text[11][5] = "The party did indeed find [Alex], in the desert.";
     }
 
     // starts the new event dialogue
@@ -178,11 +182,12 @@ public class EventController : MonoBehaviour
         page = 0;
         this.eventNum = eventNum;
         body.text = fillMe(text[eventNum][page]);
+        setPortrait();
     }
 
     private string fillMe(string words)
     {
-        return words.Replace(playerPlaceholder, alex).Replace(evilPlaceholder, xela);
+        return words.Replace(playerPlaceholder, alex).Replace(evilPlaceholder, xela).Replace(characterPlaceholder, chari);
     }
 
     // call before first nextPage() and after new EventController(eventNum)
@@ -192,6 +197,21 @@ public class EventController : MonoBehaviour
         List<char> temp = new List<char>(name.ToCharArray());
         temp.Reverse();
         xela = temp.ToArray().ToString();
+    }
+
+    // call when starting "scene11", sets the character the player won as 0 = princess, 1 = warrior, 2 = wizard
+    public void setCharacter(int num)
+    {
+        charSelect = num;
+        if (num == 1)
+        {
+            chari = "WARRIOR";
+            charmi = warrior;
+        } else if (num == 2)
+        {
+            charmi = wizard;
+            chari = "WIZARD";
+        }
     }
 
     // call after making a new EventController(eventNum)
@@ -204,6 +224,7 @@ public class EventController : MonoBehaviour
     {
         next.gameObject.SetActive(false);
         body.gameObject.SetActive(false);
+        setPortrait();
         body.text = fillMe(text[eventNum][page++]);
         yield return new WaitForSeconds(0.5f);
         body.gameObject.SetActive(true);
@@ -215,6 +236,7 @@ public class EventController : MonoBehaviour
     public void choose(bool isThree)
     {
         monologue.gameObject.SetActive(false);
+        setPortrait();
         choice1.text = text[eventNum][page++];
         choice2.text = text[eventNum][page++];
         choice3.gameObject.SetActive(isThree);
@@ -230,9 +252,59 @@ public class EventController : MonoBehaviour
     public void choiceResult(int resultNum)
     {
         dialogue.gameObject.SetActive(false);
+        setPortrait();
         resultNum = page + resultNum;
         string temp = fillMe(text[eventNum][resultNum]);
         body.text = eventNum == 2 ? temp.Replace(choicePlaceholder, text[eventNum][resultNum]) : temp;
         monologue.gameObject.SetActive(true);
+    }
+
+    private void setPortrait()
+    {
+        Sprite temp = mc;
+        switch (eventNum)
+        {
+            case 1:
+                temp = princess;
+                break;
+            case 2:
+            case 4:
+            case 6:
+            case 7:
+                temp = wizard;
+                break;
+            case 3:
+            case 5:
+            case 8:
+                temp = warrior;
+                break;
+            case 9:
+                if (page >= 0  && page <= 1)
+                {
+                    temp = princess;
+                } else if ((page >= 2 && page <= 5) || (page >= 8 && page <= 10))
+                {
+                    temp = villain;
+                }
+                break;
+            case 10:
+                if(page >= 1 && page <= 5)
+                {
+                    temp = villain;
+                }
+                break;
+            case 11:
+                if (page == 5)
+                {
+                    temp = villain;
+                } else if (page == 2 || page == 3)
+                {
+                    temp = charmi;
+                }
+                break;
+            default:
+                break;
+        }
+        icon.sprite = icon2.sprite = temp;
     }
 }
