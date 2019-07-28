@@ -47,8 +47,12 @@ public class PlatformerController : MonoBehaviour
     public void FixedUpdate()
     {
         animator.SetBool("isGrounded", isGrounded);
-        animator.SetFloat("Horizontal", rb.velocity.x);
+        animator.SetFloat("Horizontal", Mathf.Abs(rb.velocity.x));
         animator.SetFloat("Vertical", rb.velocity.y);
+
+        if(rb.velocity.y < 0 ){
+            animator.ResetTrigger("jump");
+        }
         
 
         if(!stopInput){
@@ -154,6 +158,10 @@ public class PlatformerController : MonoBehaviour
 
         if(other.transform.tag == "Enemy"){
             EnemyBase b = other.gameObject.GetComponent<EnemyBase>();
+            if(b.damage <= 0){
+                return;
+            }
+
             if(manager.TakeDamage(b.damage)){
                 
                 //avg is already direction
