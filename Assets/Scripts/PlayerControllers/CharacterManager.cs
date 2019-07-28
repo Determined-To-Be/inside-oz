@@ -65,7 +65,7 @@ public class CharacterManager : MonoBehaviour
         Debug.Log("Ouch I got hit");
 
         health -= amount;
-//        HUDController.instance.setHP(health);
+        HUDController.instance.setHP(health);
         
         invincibility(1);
         return true;

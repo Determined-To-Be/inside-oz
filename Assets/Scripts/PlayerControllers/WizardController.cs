@@ -19,7 +19,7 @@ public class WizardController : PlatformerController
 
     // Update is called once per frame
     void Update(){
-//        HUDController.instance.setMP((int)mp);
+        HUDController.instance.setMP((int)mp);
 
         if(isCharging == false){
             mp = Mathf.Clamp(mp + mpRecoveryRate * Time.deltaTime, 0, maxMP);

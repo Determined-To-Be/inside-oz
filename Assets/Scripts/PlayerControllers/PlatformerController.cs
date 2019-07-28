@@ -57,6 +57,8 @@ public class PlatformerController : MonoBehaviour
         if(rb.velocity.y < 0 ){
             animator.ResetTrigger("jump");
         }
+
+        
         
 
         if(!stopInput){

@@ -20,7 +20,7 @@ public class KnightController : PlatformerController
     void Update(){
         
         ap = Mathf.Clamp(ap + apRecoveryRate * Time.deltaTime, 0, maxAP);
-            
+        HUDController.instance.setAP((int)ap);
         if(Input.GetButtonDown("Action")){ //Start Charging
             StartCoroutine(SwordSwing());
         }
