@@ -2,13 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class EventController : MonoBehaviour
 {
-    public TMP_Text body;
+    public TMP_Text body, choice1, choice2, choice3;
     private const string playerPlaceholder = "[Alex]", evilPlaceholder = "[Xela]", choicePlaceholder = "[choice]";
     private string[][] text;
-    
+    private string alex = "ALEX", xela = "XELA";
+    private int page = 0, eventNum = 0;
+    public Image next, icon;
+    public GameObject monologue, dialogue;
+
     void Start()
     {
         // intro
@@ -28,7 +33,7 @@ public class EventController : MonoBehaviour
         text[1][7] = "The warrior raises his weapon at the wizard, blaming him for the disappearance...";
         text[1][8] = "But the princess orders him to stop as the wizard claims it was not his doing.";
         text[1][9] = "They decide to venture forth with the princess' encouragement...";
-        text[1][10] = "“If we walk far enough, we shall sometime come to someplace.”";
+        text[1][10] = "“We'll get there if we walk far enough.”";
 
         // 1st encounter
         text[2][0] = "The party stumbles upon a fork in the road and there is but one signpost.";
@@ -160,16 +165,73 @@ public class EventController : MonoBehaviour
         // outro
         text[11][0] = "[Alex] abruptly falls out of bed.";
         text[11][0] = "Realizing it was a dream, [Alex] wonders about the three party members.";
-        text[11][0] = "The [choice] closely parallels [Alex]'s own struggles."; // replace with party member name
-        text[11][0] = "With the determination to follow the [choice]'s example, [Alex] found some peace of mind, despite the rough night.";
+        text[11][0] = "The [char] closely parallels [Alex]'s own struggles.";
+        text[11][0] = "With the determination to follow the [char]'s example, [Alex] found some peace of mind, despite the rough night.";
         text[11][0] = "They are prepared for existential combat in the future.";
         text[11][0] = "The party did indeed find [Alex], in the desert.";
     }
 
     void Update()
     {
-        // value.text = ...
+
     }
 
+    public EventController(int eventNum)
+    {
+        page = 0;
+        this.eventNum = eventNum;
+        body.text = fillMe(text[eventNum][page]);
+    }
 
+    private string fillMe(string words)
+    {
+        return words.Replace(playerPlaceholder, alex).Replace(evilPlaceholder, xela);
+    }
+
+    public void setName(string name)
+    {
+        alex = name;
+        List<char> temp = new List<char>(name.ToCharArray());
+        temp.Reverse();
+        xela = temp.ToArray().ToString();
+    }
+
+    public void nextPage()
+    {
+        StartCoroutine("doNext");
+    }
+
+    private IEnumerator doNext()
+    {
+        next.gameObject.SetActive(false);
+        body.gameObject.SetActive(false);
+        body.text = fillMe(text[eventNum][page++]);
+        yield return new WaitForSeconds(0.5f);
+        body.gameObject.SetActive(true);
+        yield return new WaitForSeconds(3f);
+        next.gameObject.SetActive(true);
+    }
+    
+    public void choose(bool isThree)
+    {
+        monologue.gameObject.SetActive(false);
+        choice1.text = text[eventNum][page++];
+        choice2.text = text[eventNum][page++];
+        choice3.gameObject.SetActive(isThree);
+        if (isThree)
+        {
+            choice3.text = text[eventNum][page++];
+        }
+        dialogue.gameObject.SetActive(true);
+    }
+
+    // number result for that event index 0, not the actual text[][] index
+    public void choiceResult(int resultNum)
+    {
+        dialogue.gameObject.SetActive(false);
+        resultNum = page + resultNum;
+        string temp = fillMe(text[eventNum][resultNum]);
+        body.text = eventNum == 2 ? temp.Replace(choicePlaceholder, text[eventNum][resultNum]) : temp;
+        monologue.gameObject.SetActive(true);
+    }
 }
