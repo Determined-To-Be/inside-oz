@@ -103,10 +103,6 @@ public class PlatformerController : MonoBehaviour
 
     void OnCollisionStay2D(Collision2D other){
 
-        if(other.transform.tag == "Enemy"){
-            return;
-        }
-
         Vector2 avg = new Vector2();
         foreach(ContactPoint2D c in other.contacts){
             Debug.DrawLine(this.transform.position, c.point, Color.black);

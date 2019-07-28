@@ -3,22 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(PerlinSand))]
-public class PerlinSandEditor : Editor{
+public class PerlinSand : MonoBehaviour{
+ 
+    public bool update = false;
 
-    void OnEnable()
-    {
+    void Start(){
+        
     }
 
-    void OnInspectorGUI(){
-        if(GUILayout.Button("Update")){
-
+    void Update(){
+        if(update == true){
+            UpdateMesh();
         }
     }
-}
-
-
-public class PerlinSand : MonoBehaviour{
 
     void UpdateMesh(){
 
