@@ -162,7 +162,7 @@ public class PlatformerController : MonoBehaviour
             }
         }
 
-        if(other.transform.tag == "Enemy"){
+        if(other.transform.tag == "Enemy" || other.transform.tag == "Lava"){
             EnemyBase b = other.gameObject.GetComponent<EnemyBase>();
             if(b.damage <= 0){
                 return;
