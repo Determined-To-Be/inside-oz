@@ -20,14 +20,14 @@ public class KnightController : PlatformerController
     void Update(){
         
         ap = Mathf.Clamp(ap + apRecoveryRate * Time.deltaTime, 0, maxAP);
-        HUDController.instance.setAP((int)ap);
+        //HUDController.instance.setAP((int)ap);
         if(Input.GetButtonDown("Action")){ //Start Charging
             StartCoroutine(SwordSwing());
         }
     }
 
     IEnumerator SwordSwing(){
-        animator.Play("attack");
+        //animator.Play("attack");
         attackHitbox.SetActive(true);
         ap -= apPerAttack;
         yield return new WaitForSeconds(.5f);
