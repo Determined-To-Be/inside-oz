@@ -76,7 +76,17 @@ public class PlatformerController : MonoBehaviour
         jumpBuffered = false;
     }
 
+
+    IEnumerator footStep(float delay){
+        yield return new WaitForSeconds(delay);
+
+        yield return null;
+    }
+
     void Move(){
+
+        
+
         //Change Rotation based on the last movement
         if(Mathf.Abs(Input.GetAxisRaw("Horizontal")) > .5f)
             direction = Mathf.RoundToInt(Mathf.Sign(Input.GetAxisRaw("Horizontal")));
