@@ -5,6 +5,9 @@ using UnityEngine;
 public class PlatformerController : MonoBehaviour
 {
 
+    public int currController = 0;
+
+
     public float coyoteTime = 1f;
     public float moveAcceleration = .6f;
 
@@ -51,7 +54,7 @@ public class PlatformerController : MonoBehaviour
     public void FixedUpdate()
     {
         animator.SetBool("isGrounded", isGrounded);
-        animator.SetFloat("Horizontal", Mathf.Abs(rb.velocity.x));
+        animator.SetFloat("Horizontal"+currController, Mathf.Abs(rb.velocity.x));
         animator.SetFloat("Vertical", rb.velocity.y);
 
         if(rb.velocity.y < 0 ){
@@ -88,26 +91,26 @@ public class PlatformerController : MonoBehaviour
         
 
         //Change Rotation based on the last movement
-        if(Mathf.Abs(Input.GetAxisRaw("Horizontal")) > .5f)
-            direction = Mathf.RoundToInt(Mathf.Sign(Input.GetAxisRaw("Horizontal")));
+        if(Mathf.Abs(Input.GetAxisRaw("Horizontal"+currController)) > .5f)
+            direction = Mathf.RoundToInt(Mathf.Sign(Input.GetAxisRaw("Horizontal"+currController)));
 
         //We need an acceleration and a damping value
         float xvel = rb.velocity.x;
         float dampingValue = 1;
-        xvel += Input.GetAxisRaw("Horizontal") * moveAcceleration;
+        xvel += Input.GetAxisRaw("Horizontal"+currController) * moveAcceleration;
         if(isGrounded){
-            if(Mathf.Sign(Input.GetAxisRaw("Horizontal")) != Mathf.Sign(xvel)){ //Turning
+            if(Mathf.Sign(Input.GetAxisRaw("Horizontal"+currController)) != Mathf.Sign(xvel)){ //Turning
                 dampingValue = groundDampingTurning;
-            } else if(Mathf.Abs(Input.GetAxisRaw("Horizontal")) < .1f){ //Stopping
+            } else if(Mathf.Abs(Input.GetAxisRaw("Horizontal"+currController)) < .1f){ //Stopping
                 dampingValue = groundDampingStopping;
             } else{ //Moving
                 dampingValue = groundDampingMoving;
             }
         } else {
-            if(Mathf.Sign(Input.GetAxisRaw("Horizontal")) != Mathf.Sign(xvel)){ //Turning
+            if(Mathf.Sign(Input.GetAxisRaw("Horizontal"+currController)) != Mathf.Sign(xvel)){ //Turning
                 dampingValue = airDampingTurning;
-                //xvel = Input.GetAxisRaw("Horizontal");
-            } else if(Mathf.Abs(Input.GetAxisRaw("Horizontal")) < .1f){ //Stopping
+                //xvel = Input.GetAxisRaw("Horizontal"+currController);
+            } else if(Mathf.Abs(Input.GetAxisRaw("Horizontal"+currController)) < .1f){ //Stopping
                 dampingValue = airDampingStopping;
             } else{ //Moving
                 dampingValue = airDampingMoving;
@@ -118,13 +121,13 @@ public class PlatformerController : MonoBehaviour
         
 
         StartCoroutine(footStep(1/xvel));
-        
+
         rb.velocity = new Vector2(xvel, rb.velocity.y);
     }
 
     void Jump(){
         
-        if(Input.GetButton("Jump") && stopInput == false){
+        if(Input.GetButton("Jump"+currController) && stopInput == false){
             jumpBuffered = true;
             StartCoroutine(jumpBufferTimer(jumpBufferTime));
         }
@@ -137,7 +140,7 @@ public class PlatformerController : MonoBehaviour
             isGrounded = false;
         }
 
-        if((Input.GetButtonUp("Jump")) && rb.velocity.y > 0){
+        if((Input.GetButtonUp("Jump"+currController)) && rb.velocity.y > 0){
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * .5f);
         }
     }
