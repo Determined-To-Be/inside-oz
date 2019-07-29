@@ -117,7 +117,8 @@ public class PlatformerController : MonoBehaviour
         xvel *= Mathf.Pow(1f-dampingValue, Time.deltaTime * 10f);
         
 
-
+        StartCoroutine(footStep(1/xvel));
+        
         rb.velocity = new Vector2(xvel, rb.velocity.y);
     }
 
